@@ -1,3 +1,5 @@
+import sys
+
 # deklarasi kelas elemen graf
 # graf akan didefinisikan sebagai array of elemen graf
 class graph_elmt :
@@ -13,7 +15,8 @@ def readFile(fileName) :
 
     course_prereq = []
     for line in read_out :
-        course_prereq.append(line.replace('\n','').replace('.','').split(", "))
+        if (line != '\n') :
+            course_prereq.append(line.replace('\n','').replace('.','').split(", "))
 
     return course_prereq
 
@@ -75,32 +78,40 @@ def zeroIndeg(graphList) :
 
 # main program
 def main() :
-    graphList = makeGraph(readFile("input.txt"))
+    # baca input dan ubah jadi graf
+    graphList = makeGraph(readFile("../test/" + sys.argv[1]))
+    romanNum = ['I','II','III','IV','V','VI','VII','VIII']
 
+    # cek apakah ada data valid yang masuk
     if (graphList != []) :
-        semesterCounter = 0
-        while (not allPrinted(graphList)) :
-            print("Semester " + str(semesterCounter+1) + " : ", end="")
-            printables = zeroIndeg(graphList)
-            # print mata kuliah dengan in degree 0
-            for to_print in printables :
-                print(to_print, end="")
-                if (to_print != printables[len(printables)-1]) :
-                    print(", ", end="")
-                else :
-                    print()
+        # cek apakah ada cycle dalam graf
+        if (zeroIndeg(graphList) != []) :
+            semesterCounter = 0
+            # dilakukan print sampai semua diprint habis atau sudah mencapai semester 8 atau sudah tidak dapat mengambil mata kuliah lagi
+            while (not allPrinted(graphList) and (semesterCounter <= 7) and zeroIndeg(graphList) != []) :
+                print("Semester " + romanNum[semesterCounter] + " : ", end="")
+                printables = zeroIndeg(graphList)
+                # print mata kuliah dengan in degree 0
+                for to_print in printables :
+                    print(to_print, end="")
+                    if (to_print != printables[len(printables)-1]) :
+                        print(", ", end="")
+                    else :
+                        print()
 
-                # di next courses nya, in degree dikurangi 1
-                graphIdx = searchName(graphList,to_print)
-                curr_next_courses = graphList[graphIdx].next_courses
-                for name in curr_next_courses :
-                    next_graphIdx = searchName(graphList,name)
-                    graphList[next_graphIdx].indeg -= 1
+                    # di next courses nya, in degree dikurangi 1
+                    graphIdx = searchName(graphList,to_print)
+                    curr_next_courses = graphList[graphIdx].next_courses
+                    for name in curr_next_courses :
+                        next_graphIdx = searchName(graphList,name)
+                        graphList[next_graphIdx].indeg -= 1
 
-                # agar tidak di print lagi, yg sudah 0 dibuat jadi -1
-                graphList[graphIdx].indeg = -1
-            
-            semesterCounter += 1
+                    # agar tidak di print lagi, yg sudah 0 dibuat jadi -1
+                    graphList[graphIdx].indeg = -1
+                
+                semesterCounter += 1
+        else :
+            print("Tidak ada mata kuliah yang dapat diambil.")
     else :
         print("Tidak ada data yang valid!")
         
