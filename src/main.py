@@ -20,14 +20,6 @@ def readFile(fileName) :
 
     return course_prereq
 
-# fungsi mencari indeks diberikan nama mata kuliah pada suatu graphList
-# name dipastikan ada
-def searchName(graphList,name) :
-    i = 0
-    while(graphList[i].name != name) :
-        i += 1
-    return i
-
 # prosedur untuk membuat graf dari array of pasangan course dan prerequisitenya
 def makeGraph(course_prereq) :
     # bagi menjadi array of course dan array of prerequisite
@@ -40,7 +32,8 @@ def makeGraph(course_prereq) :
             curr_prereqs.append(course[i+1])
         prereqs.append(curr_prereqs)
 
-    # secara sederhana, akan dilakukan "inverse", sehingga tiap elemen dari graf akan mencatat course lanjutannya, bukan prerequisite nya
+    # secara sederhana, akan dilakukan "inverse", sehingga tiap elemen dari graf
+    # akan mencatat course lanjutannya, bukan prerequisite nya
     graphList = []
     for name in names :
         curr_elmt = graph_elmt(name,0,[])
@@ -58,6 +51,14 @@ def makeGraph(course_prereq) :
         courseNum += 1
 
     return graphList
+
+# fungsi mencari indeks diberikan nama mata kuliah pada suatu graphList
+# name dipastikan ada
+def searchName(graphList,name) :
+    i = 0
+    while(graphList[i].name != name) :
+        i += 1
+    return i
 
 # fungsi mengecek apakah in degree dari tiap graph sudah 0
 # true jika semua in degree 0
@@ -82,12 +83,13 @@ def main() :
     graphList = makeGraph(readFile("../test/" + sys.argv[1]))
     romanNum = ['I','II','III','IV','V','VI','VII','VIII']
 
-    # cek apakah ada data valid yang masuk
+    # cek memastikan ada data valid yang masuk
     if (graphList != []) :
-        # cek apakah ada cycle dalam graf
+        # cek memastikan tidak ada cycle dalam graf
         if (zeroIndeg(graphList) != []) :
             semesterCounter = 0
-            # dilakukan print sampai semua diprint habis atau sudah mencapai semester 8 atau sudah tidak dapat mengambil mata kuliah lagi
+            # dilakukan print sampai semua diprint habis atau sudah mencapai semester 8 
+            # atau sudah tidak dapat mengambil mata kuliah lagi
             while (not allPrinted(graphList) and (semesterCounter <= 7) and zeroIndeg(graphList) != []) :
                 print("Semester " + romanNum[semesterCounter] + " : ", end="")
                 printables = zeroIndeg(graphList)
