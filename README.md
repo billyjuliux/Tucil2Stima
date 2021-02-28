@@ -5,7 +5,7 @@ Setelah data input diolah menjadi sebuah graf, Algoritma Decrease and Conquer di
 Project ini tidak menggunakan instalasi tambahan apapun selain bahasa python3.
 
 # Cara Menggunakan Program
-Pindah ke direktori folder project ini, lalu jalankan **python3 13519094.py <nama_testcase>.txt**. Misal : python3 13519094.py 1.txt.
+Pindah ke direktori **folder src** dari project ini, lalu jalankan **python3 13519094.py <nama_testcase>.txt**. Misal : python3 13519094.py 1.txt.
 
 # Author
 Billy Julius - 13519094
